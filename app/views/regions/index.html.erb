@@ -1,0 +1,15 @@
+<h1>regions</h1>
+ 
+<table>
+  <tr>
+    <th>Title</th>
+    <th>Text</th>
+  </tr>
+ 
+  <% @regions.each do |item| %>
+    <tr>
+      <td><%= item.code %></td>
+      <td><%= item.name %></td>
+    </tr>
+  <% end %>
+</table>
