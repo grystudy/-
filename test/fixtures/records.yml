@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  region: one
+  oiltype: one
+  value: 9.99
+  user: one
+
+two:
+  region: two
+  oiltype: two
+  value: 9.99
+  user: two

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160830051129) do
+ActiveRecord::Schema.define(version: 20160830061724) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,9 +19,30 @@ ActiveRecord::Schema.define(version: 20160830051129) do
     t.string "name"
   end
 
+  create_table "records", force: :cascade do |t|
+    t.integer  "region_id"
+    t.decimal  "value",       precision: 5, scale: 2
+    t.integer  "user_id"
+    t.integer  "revision_id"
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+    t.integer  "oiltype_id"
+    t.index ["region_id"], name: "index_records_on_region_id", using: :btree
+    t.index ["revision_id"], name: "index_records_on_revision_id", using: :btree
+    t.index ["user_id"], name: "index_records_on_user_id", using: :btree
+  end
+
   create_table "regions", force: :cascade do |t|
     t.integer "code"
     t.text    "name"
+  end
+
+  create_table "revisions", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_revisions_on_user_id", using: :btree
   end
 
   create_table "users", force: :cascade do |t|
@@ -42,4 +63,9 @@ ActiveRecord::Schema.define(version: 20160830051129) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
 
+  add_foreign_key "records", "oiltypes", primary_key: "code"
+  add_foreign_key "records", "regions"
+  add_foreign_key "records", "revisions"
+  add_foreign_key "records", "users"
+  add_foreign_key "revisions", "users"
 end
