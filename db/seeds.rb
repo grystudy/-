@@ -40,11 +40,24 @@ all_regions = '地区Code	地区	89号汽油	90号汽油	92号汽油	93号汽油
 
 array = all_regions.split "\n"
 headers = array.shift.split "\t"
-array.each do |variable|
-	sub_array = variable.split "\t"
-	# Region.create({name: sub_array[1], code: sub_array[0].to_i}) 
+oiltypes = []
+(2...headers.length).each_with_index do |variable_,index_|
+	 oiltypes << Oiltype.create({code: index_+1, name: headers[variable_]})
 end
 
-(2...headers.length).each_with_index do |variable_,index_|
-	 Oiltype.create({code: index_+1, name: headers[variable_]})
+admin = User.create({name: "admin",email: "admin@meixing.com",encrypted_password: "admin123",sign_in_count: 1})
+version = Revision.create({name: "init database"})
+version.user = admin
+
+array.each do |variable|
+	sub_array = variable.split "\t"
+	region = Region.create({name: sub_array[1], code: sub_array[0].to_i})
+	(2...sub_array.length).each_with_index { |e, i| 
+		record = Record.create({value: sub_array[e].to_f})
+		record.oiltype = oiltypes[i]
+		record.user = admin
+		record.revision = version
+		record.region = region
+		record.save!
+	 }
 end
