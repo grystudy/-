@@ -39,25 +39,60 @@ all_regions = '地区Code	地区	89号汽油	90号汽油	92号汽油	93号汽油
 650000	新疆	5.91 	5.91 	5.81 	5.81 	6.25 	6.25 	5.42'
 
 array = all_regions.split "\n"
-headers = array.shift.split "\t"
-oiltypes = []
-(2...headers.length).each_with_index do |variable_,index_|
-	 oiltypes << Oiltype.create({code: index_+1, name: headers[variable_]})
-end
+# headers = array.shift.split "\t"
+# oiltypes = []
+# (2...headers.length).each_with_index do |variable_,index_|
+# 	 oiltypes << Oiltype.create({code: index_+1, name: headers[variable_]})
+# end
 
-admin = User.create({name: "admin",email: "admin@meixing.com",encrypted_password: "admin123",sign_in_count: 1})
+# admin = User.create({name: "admin",email: "admin@meixing.com",encrypted_password: "admin123",sign_in_count: 1})
 version = Revision.create({name: "init database"})
-version.user = admin
+# version.user = admin
 
 array.each do |variable|
 	sub_array = variable.split "\t"
 	region = Region.create({name: sub_array[1], code: sub_array[0].to_i})
-	(2...sub_array.length).each_with_index { |e, i| 
-		record = Record.create({value: sub_array[e].to_f})
-		record.oiltype = oiltypes[i]
-		record.user = admin
-		record.revision = version
-		record.region = region
-		record.save!
-	 }
+	# (2...sub_array.length).each_with_index { |e, i| 
+	# 	record = Record.create({value: sub_array[e].to_f})
+	# 	record.oiltype = oiltypes[i]
+	# 	record.user = admin
+	# 	record.revision = version
+	# 	record.region = region
+	# 	record.save!
+	#  }
 end
+
+hash_standard = {0=> "国Ⅲ",
+1=>"国Ⅳ",
+2=>"国Ⅴ"}
+
+hash_oiltype = {
+	0=>"0号柴油",
+1=>"5号柴油",
+2=>"10号柴油",
+3=>"-10号柴油",
+4=>"-20号柴油",
+5=>"-30号柴油",
+6=>"-35号柴油",
+7=>"89号汽油",
+8=>"90号汽油",
+9=>"92号汽油",
+10=>"93号汽油",
+11=>"95号汽油",
+12=>"97号汽油",
+13=>"98号汽油"
+}
+
+hash_standard.each do |variable|
+	standard = Standard.create({name: variable.last,id:variable.first})
+	hash_oiltype.each do |variable|
+		code = variable.first
+		name = variable.last
+		next if (standard.id == 0 || standard.id ==1) &&(code == 7 || code == 9 || code == 11)
+		next if (standard.id == 2) && (code == 8 || code == 10 || code == 12)		
+		oiltype = Oiltype.create({name: name,code: code})
+		oiltype.standard = standard
+		oiltype.save!
+	end
+end
+

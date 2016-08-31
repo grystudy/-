@@ -10,13 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160830061724) do
+ActiveRecord::Schema.define(version: 20160830091012) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "oiltypes", primary_key: "code", force: :cascade do |t|
-    t.string "name"
+  create_table "oiltypes", force: :cascade do |t|
+    t.string  "name"
+    t.integer "code"
+    t.integer "standard_id"
+    t.index ["standard_id"], name: "index_oiltypes_on_standard_id", using: :btree
   end
 
   create_table "records", force: :cascade do |t|
@@ -24,9 +27,10 @@ ActiveRecord::Schema.define(version: 20160830061724) do
     t.decimal  "value",       precision: 5, scale: 2
     t.integer  "user_id"
     t.integer  "revision_id"
+    t.integer  "oiltype_id"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
-    t.integer  "oiltype_id"
+    t.index ["oiltype_id"], name: "index_records_on_oiltype_id", using: :btree
     t.index ["region_id"], name: "index_records_on_region_id", using: :btree
     t.index ["revision_id"], name: "index_records_on_revision_id", using: :btree
     t.index ["user_id"], name: "index_records_on_user_id", using: :btree
@@ -45,6 +49,10 @@ ActiveRecord::Schema.define(version: 20160830061724) do
     t.index ["user_id"], name: "index_revisions_on_user_id", using: :btree
   end
 
+  create_table "standards", force: :cascade do |t|
+    t.string "name"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string   "name",                   default: "", null: false
     t.string   "email",                  default: "", null: false
@@ -60,10 +68,12 @@ ActiveRecord::Schema.define(version: 20160830061724) do
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
+    t.index ["name"], name: "index_users_on_name", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
 
-  add_foreign_key "records", "oiltypes", primary_key: "code"
+  add_foreign_key "oiltypes", "standards"
+  add_foreign_key "records", "oiltypes"
   add_foreign_key "records", "regions"
   add_foreign_key "records", "revisions"
   add_foreign_key "records", "users"
