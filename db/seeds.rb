@@ -39,7 +39,7 @@ all_regions = '地区Code	地区	89号汽油	90号汽油	92号汽油	93号汽油
 650000	新疆	5.91 	5.91 	5.81 	5.81 	6.25 	6.25 	5.42'
 
 array = all_regions.split "\n"
-# headers = array.shift.split "\t"
+headers = array.shift.split "\t"
 # oiltypes = []
 # (2...headers.length).each_with_index do |variable_,index_|
 # 	 oiltypes << Oiltype.create({code: index_+1, name: headers[variable_]})
@@ -93,6 +93,12 @@ hash_standard.each do |variable|
 		oiltype = Oiltype.create({name: name,code: code})
 		oiltype.standard = standard
 		oiltype.save!
+
+		record = Record.create
+		record.value = 2.11
+		record.oiltype = oiltype
+		record.region = Region.take
+		record.save!
 	end
 end
 

@@ -1,15 +1,22 @@
-<h1>regions</h1>
- 
-<table>
-  <tr>
-    <th>Title</th>
-    <th>Text</th>
-  </tr>
- 
-  <% @regions.each do |item| %>
+<table >
+  <thead>
+    <tr>
+      <th>行政code</th>
+      <th>省</th>
+      <% @oiltypes.each do |item| %>
+        <th><%= item.standard.name+item.name%></th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <% @regions.each do |item| %>
     <tr>
       <td><%= item.code %></td>
       <td><%= item.name %></td>
+      <% @oiltypes.each do |oiltype| %>
+        <td><%= record = item.records.find_by(oiltype: oiltype) ; record ? record.value : "0"%></td>
+      <% end %>
     </tr>
-  <% end %>
+    <% end %>
+  </tbody>
 </table>
