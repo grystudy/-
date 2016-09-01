@@ -1,6 +1,7 @@
 class RegionsController < ApplicationController
-	before_filter :all_regions, :except => :show
-	before_filter :all_oiltypes, :except => :show    
+	before_action :all_regions, :except => :show
+	before_action :all_oiltypes, :except => :show   
+	before_action :region, :only => :show    
 
 	def index
 		# records = Record.all
@@ -10,11 +11,19 @@ class RegionsController < ApplicationController
 		# end
 	end
 
+	def show
+		@hash_records = @region.hash_records
+	end
+
 	def all_regions
 		@regions = Region.all 
 	end
 
 	def all_oiltypes
 		@oiltypes = Oiltype.all
+	end
+
+	def region
+		@region = Region.find(params[:id])
 	end
 end

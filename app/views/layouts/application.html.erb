@@ -6,47 +6,31 @@
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-
-    <script>
-    $(function () {
-      $('#supported').text('Supported/allowed: ' + !!screenfull.enabled);
-
-      if (!screenfull.enabled) {
-        return false;
-      }
-
-      
-
-      $('#toggle').click(function () {
-        screenfull.toggle($('#container')[0]);
-      }); 
-    });
-    </script>
+    <%= yield :head %>
   </head>
 
   <body>
     <nav class="main-menu">
     <ul>    
       <li>
-        <a href=regions>
+        <a href=<%=regions_path%>>
           <i class="icon-table nav-icon"></i>
           <span class="nav-text">
           全国
           </span>
         </a>
       </li>    
+      <%= yield :nav %>
       <li class="has-subnav">
         <a href="javascript:;">
           <i class="fa fa-list-ul" aria-hidden="true"></i>
           <span class="nav-text">省</span>
           <i class="icon-angle-right"></i><i class="icon-angle-down"></i>
         </a>
-        <ul>
-          <% @regions.each do |region| %>
+        <ul>          
             <li>
-              <a class="subnav-text" href= <%=region_path(region)%>> <%= region.name%></a>
-            </li>    
-          <% end %>      
+              <a class="subnav-text" href="root_path">a</a>
+            </li>             
         </ul>
       </li>
     </ul>
@@ -65,15 +49,13 @@
     <p class="notice"><%= notice %></p>
     <p class="alert"><%= alert %></p>
     <% if current_user %>
-      <%= link_to('注销', destroy_user_session_path, :method => :delete) %> |
-      <%= link_to('修改密码', edit_registration_path(:user)) %>
+      <%= link_to('注销', destroy_user_session_path, :method => :delete,class:"label label-info") %> |
+      <%= link_to('修改密码', edit_registration_path(:user),class:"label label-info") %>
     <% else %>
-      <%= link_to('注册', new_registration_path(:user)) %> |
-      <%= link_to('登录', new_session_path(:user)) %>
-    <% end %>  
-    <div class="social grid">
-      <%= yield %>
-    </div>
+      <%= link_to('注册', new_registration_path(:user),class:"label label-info") %> |
+      <%= link_to('登录', new_session_path(:user),class:"label label-info") %>
+    <% end %>      
+    <%= yield %>  
   </section>
   </body>
 </html>

@@ -1,0 +1,56 @@
+ <!--
+<div class="progressbar-heading grids-heading">
+  <h2><%=@region.name + " " + @region.code.to_s%></h2>
+</div>
+<div class="main-grid">
+  <div class="panel panel-widget forms-panel">
+    <div class="forms">
+            <% @hash_records.each do |item|%>
+              <div class="inline-form widget-shadow">
+                <div class="form-title">
+                  <h4><%= item.first %></h4>
+                </div>
+               <% item.last.each do |type_to_records|%>
+               <% oiltype_id = type_to_records.last[0].oiltype.id%>
+                <div class="form-group">
+                 <label for=<%= oiltype_id.to_s%>><%= type_to_records.first%></label>
+                  <input type="text" name=<%= oiltype_id.to_s%> class="form-control" id=<%= oiltype_id.to_s%> placeholder="value" value=<%=type_to_records.last[0].value%>>
+                  <label for=<%= oiltype_id.to_s%>>(<%=type_to_records.last[1].value.to_s%>)</label>
+                 </div> 
+                 <% end %>
+              </div>
+            <% end %>
+    </div>
+  </div>
+</div>
+-->
+<div class="progressbar-heading grids-heading">
+  <h2><%=@region.name + " " + @region.code.to_s%></h2>
+</div>
+ <% @hash_records.each do |item|%>
+              <div class="inline-form widget-shadow">
+                <div class="form-title">
+                  <h4><%= item.first %></h4>
+                </div>
+<table >
+  <thead>
+    <tr>
+      <th>类型</th>
+      <th>价格</th>
+       <th>上次价格</th>
+      <th>上次更新</th>
+    </tr>
+  </thead>
+  <tbody>
+   <% item.last.each do |type_to_records|%>
+               <% oiltype_id = type_to_records.last[0].oiltype.id%>
+    <tr>
+      <td><%= type_to_records.first%></td>
+      <td><input type="text" name=<%= oiltype_id.to_s%> id=<%= oiltype_id.to_s%> placeholder="无价格" value=<%=type_to_records.last[0].value%>></td>
+      <td><%=type_to_records.last[1].value.to_s%></td>
+      <td><%=type_to_records.last[1].updated_at.localtime.strftime("%Y/%m/%d %H:%M:%S")%></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+ <% end %>
