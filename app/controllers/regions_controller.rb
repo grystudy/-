@@ -1,7 +1,8 @@
 class RegionsController < ApplicationController
 	before_action :all_regions, :except => :show
 	before_action :all_oiltypes, :except => :show   
-	before_action :region, :only => :show    
+	before_action :region, :only => :show 
+	before_action :all_standards, :only => :show       
 
 	def index
 		# records = Record.all
@@ -21,6 +22,10 @@ class RegionsController < ApplicationController
 
 	def all_oiltypes
 		@oiltypes = Oiltype.all
+	end
+
+	def all_standards
+		@standards = Standard.all
 	end
 
 	def region
