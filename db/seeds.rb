@@ -98,6 +98,7 @@ hash_standard.each do |variable|
 		record.value = 2.11
 		record.oiltype = oiltype
 		record.region = Region.take
+		record.revision = version
 		record.save!
 	end
 end

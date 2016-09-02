@@ -17,7 +17,7 @@
       <td><%= link_to item.code, region_path(item)%></td>
       <td><%= item.name %></td>
       <% @oiltypes.each do |oiltype| %>
-        <td><%= record = item.records.find_by(oiltype: oiltype) ; record ? record.value : "0"%></td>
+        <td><%= item.get_value oiltype%></td>
       <% end %>
     </tr>
     <% end %>

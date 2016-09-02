@@ -43,8 +43,9 @@
 </div>
 -->
 <div class="progressbar-heading grids-heading">
-  <h2><%=@region.name + " " + @region.code.to_s%></h2>
+  <h3><%=@region.name + " " + @region.code.to_s%></h3>
 </div>
+<%= form_tag(region_path(@region), method: "put",class: "form-inline") do %>
  <% @hash_records.each do |item|%>
               <div class="inline-form widget-shadow">
                 <div class="form-title">
@@ -72,3 +73,5 @@
   </tbody>
 </table>
  <% end %>
+<button type="submit" class="btn btn-default w3ls-button">保存</button>
+<% end %>
