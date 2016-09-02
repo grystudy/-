@@ -9,7 +9,7 @@
         <ul>  
         <%standard.oiltypes.each do |oiltype|%>   
           <li>               
-            <a class="subnav-text" href="root_path"><%=oiltype.name%></a>   
+            <a class="subnav-text" href=<%=add_record_for_region_path(@region)+"?oiltype_id=#{oiltype.id}&standard_id=#{standard.id}"%>><%=oiltype.name%></a>   
           </li>  
           <% end %>       
         </ul>

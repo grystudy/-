@@ -1,5 +1,6 @@
 class Region < ApplicationRecord
 	has_many :records
+	has_many :oiltypes,through: :records
 
 	def hash_records
 		hash = records.group_by do |variable|
@@ -19,5 +20,9 @@ class Region < ApplicationRecord
 			end
 		end
 		hash
+	end
+
+	def has_oiltype? oiltype_id_
+		oiltypes.exists?(id: oiltype_id_)
 	end
 end
