@@ -13,12 +13,14 @@ class RegionsController < ApplicationController
 		@region.records.each do |record|
 			value = params[record.oiltype.id.to_s]
 			next unless value
+			value = value.to_f
+			next if value == record.value
 			if record.revision && record.revision.id == revision.id
-				record.value = value.to_f
+				record.value = value
 				record.save!
 			else
 				new_rec = Record.new
-				new_rec.value = value.to_f
+				new_rec.value = value
 				new_rec.user = current_user
 				new_rec.revision = revision
 				new_rec.oiltype = record.oiltype
