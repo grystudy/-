@@ -17,6 +17,7 @@ class RegionsController < ApplicationController
 			next if value == record.value
 			if record.revision && record.revision.id == revision.id
 				record.value = value
+				record.user = current_user
 				record.save!
 			else
 				new_rec = Record.new
