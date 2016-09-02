@@ -13,13 +13,23 @@
     <nav class="main-menu">
     <ul>    
       <li>
-        <a href=<%=regions_path%>>
+        <a href=<%=records_path%>>
           <i class="icon-table nav-icon"></i>
+          <span class="nav-text">
+          版本日志
+          </span>
+        </a>
+      </li>   
+      <li>
+        <a href=<%=regions_path%>>
+          <i class="fa fa-cogs"></i>
           <span class="nav-text">
           全国
           </span>
         </a>
-      </li>    
+      </li>   
+    </ul>
+    <ul>   
       <%= yield :nav %>
     </ul>
     <ul class="logout">

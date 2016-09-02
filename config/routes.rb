@@ -5,5 +5,7 @@ Rails.application.routes.draw do
   	 get 'add_record_for', on: :member
   end
 
-  root 'regions#index'
+  resources :records
+
+  root 'records#index'
 end

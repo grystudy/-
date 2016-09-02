@@ -13,7 +13,7 @@ class Region < ApplicationRecord
 		end
 		hash.each do |hash_|
 			hash_.last.each do |variable|				
-				revisions_record = sort_by_version_desc variable.last
+				revisions_record = Record.sort_by_version_desc variable.last
 				first = revisions_record.first
 				second = revisions_record.length == 1 ? first : revisions_record[1]
 				hash_.last[variable.first] = [first,second]
@@ -29,17 +29,7 @@ class Region < ApplicationRecord
 	def get_value oiltype
 		o_id = oiltype.id
 		return 0 unless has_oiltype? o_id
-		items = sort_by_version_desc(records.where(oiltype: oiltype).all)
+		items = Record.sort_by_version_desc(records.where(oiltype: oiltype).all)
 		return items.length >0 ? items.first.value : 0;
-	end
-
-	def sort_by_version_desc array
-		array.sort do |a,b| 
-			bR=b.revision
-			aR = a.revision
-			b_id = bR ? bR.id : 0
-			a_id = aR ? aR.id : 0
-			b_id<=>a_id
-		end
 	end
 end

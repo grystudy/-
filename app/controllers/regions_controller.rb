@@ -4,14 +4,6 @@ class RegionsController < ApplicationController
 	before_action :region, :only => [:show, :add_record_for,:update]
 	before_action :all_standards, :only => :show       
 
-	def index
-		# records = Record.all
-		# records.each do |variable|
-		# 	variable.user = current_user if variable.user.nil? 
-		# 	variable.save!
-		# end
-	end
-
 	def show
 		@hash_records = @region.hash_records
 	end
