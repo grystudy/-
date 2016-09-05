@@ -12,7 +12,7 @@
       <th>编辑人员</th>
       <th>数据版本</th>
       <th>更新时间</th>
-      <th>回退版本</th>
+      <th>回退到上次版本</th>
     </tr>
   </thead>
   <tbody>
@@ -25,7 +25,7 @@
       <td><%= item.user ? item.user.name : nil %></td>     
       <td><%= item.revision ? (item.revision.id.to_s + " " + item.revision.name) : nil%></td>     
       <td><%= item.updated_at.localtime.strftime("%Y/%m/%d %H:%M:%S")%></td>     
-      <td><%= link_to "回退版本", record_path(item), method: :delete%></td>
+      <td><%= link_to "回退到上次版本", record_path(item), method: :delete%></td>
     </tr>
     <% end %>
   </tbody>

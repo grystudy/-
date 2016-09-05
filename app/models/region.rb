@@ -15,7 +15,7 @@ class Region < ApplicationRecord
 			hash_.last.each do |variable|				
 				revisions_record = Record.sort_by_version_desc variable.last
 				first = revisions_record.first
-				second = revisions_record.length == 1 ? first : revisions_record[1]
+				second = revisions_record.length == 1 ? nil : revisions_record[1]
 				hash_.last[variable.first] = [first,second]
 			end
 		end
