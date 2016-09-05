@@ -5,7 +5,13 @@ Rails.application.routes.draw do
   	 get 'add_record_for', on: :member
   end
 
-  resources :records
+  resources :records do
+  	collection do
+  		get 'push_diff'
+  		get 'push_all'
+  		get 'stash'
+  	end
+  end
 
   root 'records#index'
 end

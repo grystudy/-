@@ -16,7 +16,7 @@
         <a href=<%=records_path%>>
           <i class="icon-table nav-icon"></i>
           <span class="nav-text">
-          待发布变更
+          变更履历
           </span>
         </a>
       </li>   
@@ -34,10 +34,26 @@
     </ul>
     <ul class="logout">
       <li>
-      <a href="login.html">
+      <a href=<%=push_diff_records_path%> onClick="return confirm('确定?');">
       <i class="icon-off nav-icon"></i>
       <span class="nav-text">
-      发布
+      发布差分数据
+      </span>
+      </a>
+      </li>
+      <li>
+      <a href=<%=push_all_records_path%> onClick="return confirm('确定?');">
+      <i class="fa fa-cogs"></i>
+      <span class="nav-text">
+      发布全部数据
+      </span>
+      </a>
+      </li>
+      <li>
+      <a href=<%=stash_records_path%> onClick="return confirm('确定?');">
+      <i class="fa fa-cogs"></i>
+      <span class="nav-text">
+      创建版本(不发布数据)
       </span>
       </a>
       </li>
@@ -47,7 +63,7 @@
     <p class="notice"><%= notice %></p>
     <p class="alert"><%= alert %></p>
     <% if current_user %>
-      <%= link_to('注销', destroy_user_session_path, :method => :delete,class:"label label-info") %> |
+      <%= link_to(current_user.name + '  注销', destroy_user_session_path, :method => :delete,class:"label label-info") %> |
       <%= link_to('修改密码', edit_registration_path(:user),class:"label label-info") %>
     <% else %>
       <%= link_to('注册', new_registration_path(:user),class:"label label-info") %> |
