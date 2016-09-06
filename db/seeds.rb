@@ -93,13 +93,6 @@ hash_standard.each do |variable|
 		oiltype = Oiltype.create({name: name,code: code})
 		oiltype.standard = standard
 		oiltype.save!
-
-		record = Record.create
-		record.value = 2.11
-		record.oiltype = oiltype
-		record.region = Region.take
-		record.revision = version
-		record.save!
 	end
 end
 

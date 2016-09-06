@@ -1,6 +1,8 @@
 <% content_for :head do %>
 <% end %>
-<h1>版本日志</h1>
+
+<% commit = @commit%>
+<h1>油价记录</h1>
 <div style="overflow-x: auto; overflow-y: auto;width:100%;">
 <table>
   <thead>
@@ -12,7 +14,9 @@
       <th>编辑人员</th>
       <th>数据版本</th>
       <th>更新时间</th>
-      <th>回退到上次版本</th>
+      <%if !commit%>
+        <th>删除记录</th>
+      <%end%>
     </tr>
   </thead>
   <tbody>
@@ -24,10 +28,17 @@
       <td><%= item.value %></td>     
       <td><%= item.user ? item.user.name : nil %></td>     
       <td><%= item.revision ? (item.revision.id.to_s + " " + item.revision.name) : nil%></td>     
-      <td><%= item.updated_at.localtime.strftime("%Y/%m/%d %H:%M:%S")%></td>     
-      <td><%= link_to "回退到上次版本", record_path(item), method: :delete%></td>
+      <td><%= item.local_updated_at%></td>
+      <%if !commit && !item.uploaded%> 
+        <td><%= link_to "删除记录", record_path(item), method: :delete%></td>
+      <%end%>
     </tr>
     <% end %>
   </tbody>
 </table>
+<%if commit%>
+  <a href=<%=push_diff_records_path+"?execute=1"%>>
+  <button class="btn btn-default w3ls-button">上传服务器</button>
+  </a>
+<%end%>
 </div>

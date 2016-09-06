@@ -4,6 +4,10 @@ class Record < ApplicationRecord
   belongs_to :user
   belongs_to :revision
 
+  def local_updated_at
+  	updated_at.localtime.strftime("%Y/%m/%d %H:%M:%S")
+  end
+
   class << self
 		def sort_by_version_desc array
 			res = array.sort do |a,b| 

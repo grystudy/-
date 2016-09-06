@@ -26,6 +26,7 @@ class RegionsController < ApplicationController
 				new_rec.revision = revision
 				new_rec.oiltype = record.oiltype
 				new_rec.region = @region
+				new_rec.uploaded = false
 				new_rec.save!
 			end
 		end
@@ -47,6 +48,7 @@ class RegionsController < ApplicationController
 			record.revision = revision
 			record.oiltype = o_type
 			record.region = @region
+			record.uploaded = false
 			message = "创建成功" if record.save		
 			end	
 		end

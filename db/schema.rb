@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160830091012) do
+ActiveRecord::Schema.define(version: 20160906024802) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,6 +30,7 @@ ActiveRecord::Schema.define(version: 20160830091012) do
     t.integer  "oiltype_id"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
+    t.boolean  "uploaded"
     t.index ["oiltype_id"], name: "index_records_on_oiltype_id", using: :btree
     t.index ["region_id"], name: "index_records_on_region_id", using: :btree
     t.index ["revision_id"], name: "index_records_on_revision_id", using: :btree
