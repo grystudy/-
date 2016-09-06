@@ -11,30 +11,25 @@ class RecordsController < ApplicationController
 
 	def push_diff
 		revision = Revision.last
+		@commit = true
 		if revision
 			data = Record.where(revision_id: revision.id,uploaded: false)
-			if data.length == 0
-				redirect_to records_path,notice: "发布失败,无新数据!"
-				return
-			else
+			if data.length >= 0				
 				if params[:execute]
 					if async_upload_records data
 						new_revision = Revision.create({name: "after push diff"})
 						new_revision.user = current_user
-						new_revision.save!
-						message = "全部数据上传成功!"		
+						new_revision.save!						
+						redirect_to push_diff_records_path,notice: "所有数据上传成功!"
 					else
-						message = "某些数据上传失败，请重新尝试!"
+						redirect_to push_diff_records_path,notice: "某些数据上传失败，请重新尝试!"
 					end
-					redirect_to push_diff_records_path,notice: message
-					return			
-				else
-					@commit = true
-					@records = data
-					render 'index'
-					return					
+					return									
 				end
 			end
+			@records = data
+			render 'index'
+			return			
 		else
 			redirect_to records_path,notice: "无版本"
 			return
@@ -97,17 +92,18 @@ class RecordsController < ApplicationController
 
 	private	
 	require 'net/http'
-	base_uri = "192.168.5.57"
-	port = 3000
-	sub_url = "api/v1/oilprice/modifyOilPrice"
 
 	def upload_record record_
-		Net::HTTP.version_1_2
+		base_uri = "http://192.168.5.57:3001"
+		url = URI.parse(base_uri)
+		sub_url = "api/v1/chargeservice/oilprice/modifyOilPrice"
 		begin
-			res =Net::HTTP.start(base_uri, port) {|http|
-				response = http.get("#{sub_url}?apikey=mxnavi&code=#{record_.region.code}&area=#{record_.region.name}&standard=#{record_.standard.name}&number=#{record_.oiltype.name}&price=#{record_.value}&updatetime=#{record_.local_updated_at}")
-				response.body}
-			return res
+			params = "#{sub_url}?apikey=mxnavi&code=#{record_.region.code}&area=#{record_.region.name}&standard=#{record_.oiltype.standard.name}&number=#{record_.oiltype.name}&price=#{record_.value}&updatetime=#{record_.local_updated_at}"
+		 	uri = "http://#{url.host}:#{url.port}/"+ params
+		 	uri = uri.dump.gsub(/\"/,'')
+			res = Net::HTTP.get_response(URI(uri))
+			return false unless res
+			return eval(res.body)[:rspcode] == 20000
 		rescue Exception => e
 			return false 
 		end

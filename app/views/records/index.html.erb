@@ -36,7 +36,7 @@
     <% end %>
   </tbody>
 </table>
-<%if commit%>
+<%if commit&& @records.length>0%>
   <a href=<%=push_diff_records_path+"?execute=1"%>>
   <button class="btn btn-default w3ls-button">上传服务器</button>
   </a>

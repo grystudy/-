@@ -10,11 +10,13 @@ class RegionsController < ApplicationController
 
 	def update
 		revision = get_or_create_revision
-		@region.records.each do |record|
+		@region.hash_records.each do |array|
+			array[1].each do |sub_array|
+			record = sub_array.last.first
 			value = params[record.oiltype.id.to_s]
 			next unless value
 			value = value.to_f
-			next if value == record.value
+			next if value == record.value.to_f
 			if record.revision && record.revision.id == revision.id
 				record.value = value
 				record.user = current_user
@@ -28,6 +30,7 @@ class RegionsController < ApplicationController
 				new_rec.region = @region
 				new_rec.uploaded = false
 				new_rec.save!
+			end
 			end
 		end
 		redirect_to root_path, notice: "已更新"
