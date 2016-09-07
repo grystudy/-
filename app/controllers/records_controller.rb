@@ -99,9 +99,8 @@ class RecordsController < ApplicationController
 		sub_url = "api/v1/chargeservice/oilprice/modifyOilPrice"
 		begin
 			params = "#{sub_url}?apikey=mxnavi&code=#{record_.region.code}&area=#{record_.region.name}&standard=#{record_.oiltype.standard.name}&number=#{record_.oiltype.name}&price=#{record_.value}&updatetime=#{record_.local_updated_at}"
-		 	uri = "http://#{url.host}:#{url.port}/"+ params
-		 	uri = uri.dump.gsub(/\"/,'')
-			res = Net::HTTP.get_response(URI(uri))
+		 	uri = base_uri +"/"+params
+			res = Net::HTTP.get_response(URI(URI.encode(uri)))
 			return false unless res
 			return eval(res.body)[:rspcode] == 20000
 		rescue Exception => e
