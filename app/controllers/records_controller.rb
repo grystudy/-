@@ -85,16 +85,17 @@ class RecordsController < ApplicationController
 		redirect_to records_path,notice: message
 	end
 
-	private	
+	private		
 	require 'net/http'
 
-	def upload_record record_
-		base_uri = "http://staging.loopon.cn"
+	@@base_uri = "http://staging.loopon.cn"
 		# base_uri = "http://192.168.5.57:3001"
-		sub_url = "api/v1/chargeservice/oilprice/modifyOilPrice"
+	
+	def upload_record record_	
 		begin
+			sub_url = "api/v1/chargeservice/oilprice/modifyOilPrice"
 			params = "#{sub_url}?apikey=mxnavi&code=#{record_.region.code}&area=#{record_.region.name}&standard=#{record_.oiltype.standard.name}&number=#{record_.oiltype.name}&price=#{record_.value}&updatetime=#{record_.local_updated_at}"
-		 	uri = base_uri +"/"+params
+		 	uri = @@base_uri +"/"+params
 			res = Net::HTTP.get_response(URI(URI.encode(uri)))
 			return false unless res
 			return eval(res.body)[:rspcode] == 20000
