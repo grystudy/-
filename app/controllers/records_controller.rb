@@ -49,11 +49,7 @@ class RecordsController < ApplicationController
 			end
 			if data.length == 0
 				message = "发布失败,无新数据!"
-			else
-				data = Record.where(revision_id: revision.id)
-				if data.length == 0
-					message = "发布成功但不需要创建新版本。"
-				else
+			else				
 					if async_upload_records data
 						new_revision = Revision.create({name: "after push all"})
 						new_revision.user = current_user
@@ -61,8 +57,7 @@ class RecordsController < ApplicationController
 						message = "发布成功并且创建新版本。"
 					else
 						message = "上传数据失败。"
-					end
-				end
+					end				
 			end
 		else
 			message = "无版本"
@@ -94,8 +89,8 @@ class RecordsController < ApplicationController
 	require 'net/http'
 
 	def upload_record record_
-		base_uri = "http://192.168.5.57:3001"
-		url = URI.parse(base_uri)
+		base_uri = "http://staging.loopon.cn"
+		# base_uri = "http://192.168.5.57:3001"
 		sub_url = "api/v1/chargeservice/oilprice/modifyOilPrice"
 		begin
 			params = "#{sub_url}?apikey=mxnavi&code=#{record_.region.code}&area=#{record_.region.name}&standard=#{record_.oiltype.standard.name}&number=#{record_.oiltype.name}&price=#{record_.value}&updatetime=#{record_.local_updated_at}"
@@ -123,8 +118,8 @@ class RecordsController < ApplicationController
    			arr[i] = Thread.new { Thread.current["rec"] = rec; upload_record rec}
 			end
 			arr.each do |t| 
-				t.join;
-				if t.value
+				t = t.join(3);
+				if t && t.value
 					rec =	t["rec"]
 					rec.uploaded = true
 					rec.save!
@@ -133,6 +128,24 @@ class RecordsController < ApplicationController
 				end
 			end
 		end
+		return res
+	end
+
+	def sync_upload_records records_
+		res = true
+		return res if !records_ || records_.length == 0
+		index = 0
+		while index < records_.length
+			rec = records_[index]
+			index = index + 1
+			succeed = upload_record rec
+			if succeed
+				rec.uploaded = true
+				rec.save!
+			else
+				res = false
+  		end			
+  	end
 		return res
 	end
 end

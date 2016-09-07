@@ -31,6 +31,8 @@
       <td><%= item.local_updated_at%></td>
       <%if !commit && !item.uploaded%> 
         <td><%= link_to "删除记录", record_path(item), method: :delete%></td>
+      <%elsif !commit && item.uploaded%> 
+        <td>已上传</td>
       <%end%>
     </tr>
     <% end %>
