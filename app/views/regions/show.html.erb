@@ -40,7 +40,7 @@
     <% oiltype_id = type_to_records.last[0].oiltype.id%>
     <tr>
       <td><%= type_to_records.first%></td>
-      <td><input type="text" name=<%= oiltype_id.to_s%> id=<%= oiltype_id.to_s%> placeholder="无价格" pattern="^[0-9]{1,3}(\.[0-9]{0,2})?$" value=<%=type_to_records.last[0].value%>></td>
+      <td><input type="text" name=<%= oiltype_id.to_s%> id=<%= oiltype_id.to_s%> placeholder="无价格" pattern="^[0-9]{1,2}(\.[0-9]{0,2})?$" value=<%=type_to_records.last[0].value%>></td>
       <%last_record = type_to_records.last[1]%>
       <td><%=last_record ? last_record.value.to_s : "无"%></td>
       <td><%=type_to_records.last[0].local_updated_at%></td>
