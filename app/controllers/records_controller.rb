@@ -107,9 +107,10 @@ class RecordsController < ApplicationController
 	def async_upload_records records_
 		res = true
 		return res if !records_ || records_.length == 0
-		max_thread_count = 5
+		max_thread_count = 3
 		index = 0
 		while index < records_.length
+			break unless res
 			left = records_.length - index
 			min = left > max_thread_count ? max_thread_count : left
 			arr = []
@@ -119,7 +120,8 @@ class RecordsController < ApplicationController
    			arr[i] = Thread.new { Thread.current["rec"] = rec; upload_record rec}
 			end
 			arr.each do |t| 
-				t = t.join(3);
+				break unless res
+				t = t.join(5);
 				if t && t.value
 					rec =	t["rec"]
 					rec.uploaded = true
