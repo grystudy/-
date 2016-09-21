@@ -87,6 +87,16 @@ class RecordsController < ApplicationController
 		redirect_to records_path,notice: message
 	end
 
+	def reset_fresh_all
+		revision = Revision.last
+		Record.all.each do |r|
+			r.uploaded = false
+			r.revision = revision
+			r.save!
+		end
+		redirect_to push_diff_records_path
+	end
+
 	private		
 	require 'net/http'
 
@@ -131,7 +141,7 @@ class RecordsController < ApplicationController
 			end
 			arr.each do |t| 
 				break unless res
-				t = t.join(5);
+				t = t.join(6);
 				if t && t.value
 					rec =	t["rec"]
 					rec.uploaded = true

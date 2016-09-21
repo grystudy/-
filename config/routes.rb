@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   		get 'push_diff'
   		get 'push_all'
   		get 'stash'
+      get 'reset_fresh_all'
   	end
   end
 
