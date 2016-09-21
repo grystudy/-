@@ -109,7 +109,7 @@ class RecordsController < ApplicationController
 	def async_upload_records records_
 		res = true
 		return res if !records_ || records_.length == 0
-		raise 'not uniq' unless records_.size == records_.uniq.size
+		raise 'not uniq' unless records_.size == records_.uniq{|item_|item_.id}.size
 		max_thread_count = 3
 		index = 0
 		while index < records_.length
