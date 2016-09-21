@@ -28,7 +28,7 @@ class Record < ApplicationRecord
 				if rec_.length == 1
 					data << rec_.first
 				else
-					raise 'unknown'
+					raise 'unknown' if false
 				end
 			end
 			data
