@@ -58,6 +58,15 @@ class RegionsController < ApplicationController
 		redirect_to region_path(@region), notice: message
 	end
 
+  def background_modify_code
+		name = params[:n]
+		code = params[:c]
+		reg = Region.where(name: name).first
+		reg.code = code.to_i
+		reg.save!
+		redirect_to regions_path
+	end
+
 	private
 
 	def all_regions
