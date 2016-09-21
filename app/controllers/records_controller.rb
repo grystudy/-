@@ -93,15 +93,21 @@ class RecordsController < ApplicationController
 	@@base_uri = "http://staging.loopon.cn"
 		# base_uri = "http://192.168.5.57:3001"
 	
-	def upload_record record_	
+	def upload_record record_
+		sub_url = "api/v1/chargeservice/oilprice/modifyOilPrice"
+		params = "#{sub_url}?apikey=mxnavi&code=#{record_.region.code}&area=#{record_.region.name}&standard=#{record_.oiltype.standard.name}&number=#{record_.oiltype.name}&price=#{record_.value}&updatetime=#{record_.local_updated_at}"
+		uri = @@base_uri +"/"+params
 		begin
-			sub_url = "api/v1/chargeservice/oilprice/modifyOilPrice"
-			params = "#{sub_url}?apikey=mxnavi&code=#{record_.region.code}&area=#{record_.region.name}&standard=#{record_.oiltype.standard.name}&number=#{record_.oiltype.name}&price=#{record_.value}&updatetime=#{record_.local_updated_at}"
-		 	uri = @@base_uri +"/"+params
 			res = Net::HTTP.get_response(URI(URI.encode(uri)))
-			return false unless res
-			return eval(res.body)[:rspcode] == 20000
+			unless res
+				logger.warn uri + '>>>' + 'failed'
+				return false
+			end
+			res_code = eval(res.body)[:rspcode]
+			logger.warn uri + '>>>' + res_code.to_s
+			return res_code == 20000
 		rescue Exception => e
+			logger.warn uri + '>>>' + e.message
 			return false 
 		end
 	end
@@ -110,6 +116,7 @@ class RecordsController < ApplicationController
 		res = true
 		return res if !records_ || records_.length == 0
 		raise 'not uniq' unless records_.size == records_.uniq{|item_|item_.id}.size
+		::Rails.logger.warn(Time.now.localtime.to_s + '*******************************************************'+" count: #{records_.size}")
 		max_thread_count = 3
 		index = 0
 		while index < records_.length
