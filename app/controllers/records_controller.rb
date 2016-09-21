@@ -39,12 +39,14 @@ class RecordsController < ApplicationController
 	def push_all
 		revision = Revision.last
 		if revision
-			relation = Record.select("max(revision_id) as last_version,oiltype_id").group("oiltype_id")
+			relation = Record.select("max(revision_id) as last_version,oiltype_id,region_id").group("oiltype_id,region_id")
 			data = []
-			relation.each do |variable|
-				rec_ = Record.where(oiltype_id: variable.oiltype_id,revision_id: variable.last_version)
+			relation.each do |e|
+				rec_ = Record.where(oiltype_id: e.oiltype_id,revision_id: e.last_version,region_id: e.region_id)
 				if rec_.length == 1
 					data << rec_.first
+				else
+					raise 'unknown'
 				end
 			end
 			if data.length == 0
