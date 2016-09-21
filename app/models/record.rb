@@ -19,5 +19,19 @@ class Record < ApplicationRecord
 			end
 			return res
 		end
+
+		def get_all
+			data = []
+			relation = Record.select("max(revision_id) as last_version,oiltype_id,region_id").group("oiltype_id,region_id")
+			relation.each do |e|
+				rec_ = Record.where(oiltype_id: e.oiltype_id,revision_id: e.last_version,region_id: e.region_id)
+				if rec_.length == 1
+					data << rec_.first
+				else
+					raise 'unknown'
+				end
+			end
+			data
+		end
 	end
 end

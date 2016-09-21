@@ -39,16 +39,7 @@ class RecordsController < ApplicationController
 	def push_all
 		revision = Revision.last
 		if revision
-			relation = Record.select("max(revision_id) as last_version,oiltype_id,region_id").group("oiltype_id,region_id")
-			data = []
-			relation.each do |e|
-				rec_ = Record.where(oiltype_id: e.oiltype_id,revision_id: e.last_version,region_id: e.region_id)
-				if rec_.length == 1
-					data << rec_.first
-				else
-					raise 'unknown'
-				end
-			end
+			data = Record.get_all
 			if data.length == 0
 				message = "发布失败,无新数据!"
 			else				
@@ -89,7 +80,7 @@ class RecordsController < ApplicationController
 
 	def reset_fresh_all
 		revision = Revision.last
-		Record.all.each do |r|
+		Record.get_all.each do |r|
 			r.uploaded = false
 			r.revision = revision
 			r.save!
