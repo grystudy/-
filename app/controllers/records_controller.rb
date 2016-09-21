@@ -91,7 +91,7 @@ class RecordsController < ApplicationController
 	private		
 	require 'net/http'
 
-	@@base_uri = "http://www.loopon.cn"
+	@@base_uri = "http://www.loopon.cn:13001"
 		# base_uri = "http://192.168.5.57:3001"
 	
 	def upload_record record_
