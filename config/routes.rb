@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   		get 'push_all'
   		get 'stash'
       get 'reset_fresh_all'
+      get 'background_clear'
   	end
   end
 

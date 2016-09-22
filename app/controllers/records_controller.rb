@@ -88,6 +88,11 @@ class RecordsController < ApplicationController
 		redirect_to push_diff_records_path
 	end
 
+	def background_clear
+		Record.delete_all
+		redirect_to records_path,notice: "all records cleared"
+	end
+
 	private		
 	require 'net/http'
 
@@ -96,7 +101,8 @@ class RecordsController < ApplicationController
 	
 	def upload_record record_
 		sub_url = "api/v1/chargeservice/oilprice/modifyOilPrice"
-		params = "#{sub_url}?apikey=mxnavi&code=#{record_.region.code}&area=#{record_.region.name}&standard=#{record_.oiltype.standard.name}&number=#{record_.oiltype.name}&price=#{record_.value}&updatetime=#{record_.local_updated_at}"
+		key = 'af3d1b80-628a-0134-fed7-00163e081329'
+		params = "#{sub_url}?apikey=#{key}&code=#{record_.region.code}&area=#{record_.region.name}&standard=#{record_.oiltype.standard.name}&number=#{record_.oiltype.name}&price=#{record_.value}&updatetime=#{record_.local_updated_at}"
 		uri = @@base_uri +"/"+params
 		begin
 			res = Net::HTTP.get_response(URI(URI.encode(uri)))
