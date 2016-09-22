@@ -1,6 +1,6 @@
 class RecordsController < ApplicationController
 	def index
-		@records = Record.order(updated_at: :desc)
+		@records = Record.order(updated_at: :desc).page(params[:page]).per_page(10)
 	end
 
 	def destroy

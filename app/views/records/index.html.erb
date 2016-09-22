@@ -3,6 +3,7 @@
 
 <% commit = @commit%>
 <h1>油价记录</h1>
+<%= will_paginate @records unless commit %>
 <div style="overflow-x: auto; overflow-y: auto;width:100%;">
 <table>
   <thead>
